@@ -1,19 +1,9 @@
 module PhotoGroove exposing (..)
 
 import Html exposing (..)
+import Html.App
+import Html.Events exposing (onClick)
 import Html.Attributes exposing (..)
-
-
-initialModel =
-    { photos =
-        [ { url = "1.jpeg" }
-        , { url = "2.jpeg" }
-        , { url = "3.jpeg" }
-        ]
-    , selectedUrl =
-        "1.jpeg"
-        -- Select first photo by default
-    }
 
 
 urlPrefix =
@@ -36,9 +26,30 @@ viewThumbnail selectedUrl thumbnail =
     img
         [ src (urlPrefix ++ thumbnail.url)
         , classList [ ( "selected", selectedUrl == thumbnail.url ) ]
+        , onClick { operation = "SELECT_PHOTO", data = thumbnail.url }
         ]
         []
 
 
+initialModel =
+    { photos =
+        [ { url = "1.jpeg" }
+        , { url = "2.jpeg" }
+        , { url = "3.jpeg" }
+        ]
+    , selectedUrl =
+        "1.jpeg"
+        -- Select first photo by default
+    }
+
+
+update msg model =
+    if msg.operation == "SELECT_PHOTO" then
+        { model | selectedUrl = msg.data }
+    else
+        model
+
+
 main =
-    view initialModel
+    Html.App.beginnerProgram
+        { model = initialModel, view = view, update = update }
