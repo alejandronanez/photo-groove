@@ -7759,17 +7759,27 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
 var _user$project$PhotoGroove$urlPrefix = 'http://elm-in-action.com/';
-var _user$project$PhotoGroove$viewThumbnail = function (thumbnail) {
-	return A2(
-		_elm_lang$html$Html$img,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$src(
-				A2(_elm_lang$core$Basics_ops['++'], _user$project$PhotoGroove$urlPrefix, thumbnail.url))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[]));
-};
+var _user$project$PhotoGroove$viewThumbnail = F2(
+	function (selectedUrl, thumbnail) {
+		return A2(
+			_elm_lang$html$Html$img,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$src(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$PhotoGroove$urlPrefix, thumbnail.url)),
+					_elm_lang$html$Html_Attributes$classList(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{
+							ctor: '_Tuple2',
+							_0: 'selected',
+							_1: _elm_lang$core$Native_Utils.eq(selectedUrl, thumbnail.url)
+						}
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
 var _user$project$PhotoGroove$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -7793,15 +7803,36 @@ var _user$project$PhotoGroove$view = function (model) {
 					[
 						_elm_lang$html$Html_Attributes$id('thumbnails')
 					]),
-				A2(_elm_lang$core$List$map, _user$project$PhotoGroove$viewThumbnail, model))
+				A2(
+					_elm_lang$core$List$map,
+					function (photo) {
+						return A2(_user$project$PhotoGroove$viewThumbnail, model.selectedUrl, photo);
+					},
+					model.photos)),
+				A2(
+				_elm_lang$html$Html$img,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('large'),
+						_elm_lang$html$Html_Attributes$src(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_user$project$PhotoGroove$urlPrefix,
+							A2(_elm_lang$core$Basics_ops['++'], 'large/', model.selectedUrl)))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[]))
 			]));
 };
-var _user$project$PhotoGroove$initialModel = _elm_lang$core$Native_List.fromArray(
-	[
-		{url: '1.jpeg'},
-		{url: '2.jpeg'},
-		{url: '3.jpeg'}
-	]);
+var _user$project$PhotoGroove$initialModel = {
+	photos: _elm_lang$core$Native_List.fromArray(
+		[
+			{url: '1.jpeg'},
+			{url: '2.jpeg'},
+			{url: '3.jpeg'}
+		]),
+	selectedUrl: '1.jpeg'
+};
 var _user$project$PhotoGroove$main = {
 	main: _user$project$PhotoGroove$view(_user$project$PhotoGroove$initialModel)
 };
