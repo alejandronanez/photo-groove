@@ -7758,6 +7758,18 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _user$project$PhotoGroove$urlPrefix = 'http://elm-in-action.com/';
+var _user$project$PhotoGroove$viewThumbnail = function (thumbnail) {
+	return A2(
+		_elm_lang$html$Html$img,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$src(
+				A2(_elm_lang$core$Basics_ops['++'], _user$project$PhotoGroove$urlPrefix, thumbnail.url))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
 var _user$project$PhotoGroove$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -7773,7 +7785,7 @@ var _user$project$PhotoGroove$view = function (model) {
 					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Photo Groove!')
+						_elm_lang$html$Html$text('Photo Groove')
 					])),
 				A2(
 				_elm_lang$html$Html$div,
@@ -7781,37 +7793,17 @@ var _user$project$PhotoGroove$view = function (model) {
 					[
 						_elm_lang$html$Html_Attributes$id('thumbnails')
 					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$img,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$src('http://elm-in-action.com/1.jpeg')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_elm_lang$html$Html$img,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$src('http://elm-in-action.com/2.jpeg')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_elm_lang$html$Html$img,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$src('http://elm-in-action.com/3.jpeg')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					]))
+				A2(_elm_lang$core$List$map, _user$project$PhotoGroove$viewThumbnail, model))
 			]));
 };
+var _user$project$PhotoGroove$initialModel = _elm_lang$core$Native_List.fromArray(
+	[
+		{url: '1.jpeg'},
+		{url: '2.jpeg'},
+		{url: '3.jpeg'}
+	]);
 var _user$project$PhotoGroove$main = {
-	main: _user$project$PhotoGroove$view('no model yet')
+	main: _user$project$PhotoGroove$view(_user$project$PhotoGroove$initialModel)
 };
 
 var Elm = {};
