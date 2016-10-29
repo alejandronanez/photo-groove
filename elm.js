@@ -7805,9 +7805,7 @@ var _user$project$PhotoGroove$view = function (model) {
 					]),
 				A2(
 					_elm_lang$core$List$map,
-					function (photo) {
-						return A2(_user$project$PhotoGroove$viewThumbnail, model.selectedUrl, photo);
-					},
+					_user$project$PhotoGroove$viewThumbnail(model.selectedUrl),
 					model.photos)),
 				A2(
 				_elm_lang$html$Html$img,
