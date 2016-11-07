@@ -4,15 +4,27 @@ import Html exposing (..)
 import Html.App
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (..)
+import Array exposing (Array)
 
 
+urlPrefix : String
 urlPrefix =
     "http://elm-in-action.com/"
 
 
+type alias Msg =
+    { operation : String
+    , data : String
+    }
+
+
+view : Model -> Html Msg
 view model =
     div [ class "content" ]
         [ h1 [] [ text "Photo Groove" ]
+        , button
+            [ onClick { operation = "SURPRISE_ME", data = "" } ]
+            [ text "Surprise me!" ]
         , div [ id "thumbnails" ] (List.map (viewThumbnail model.selectedUrl) model.photos)
         , img
             [ class "large"
@@ -22,6 +34,7 @@ view model =
         ]
 
 
+viewThumbnail : String -> Photo -> Html Msg
 viewThumbnail selectedUrl thumbnail =
     img
         [ src (urlPrefix ++ thumbnail.url)
@@ -31,6 +44,18 @@ viewThumbnail selectedUrl thumbnail =
         []
 
 
+type alias Photo =
+    { url : String
+    }
+
+
+type alias Model =
+    { photos : List Photo
+    , selectedUrl : String
+    }
+
+
+initialModel : Model
 initialModel =
     { photos =
         [ { url = "1.jpeg" }
@@ -43,9 +68,17 @@ initialModel =
     }
 
 
+photoArray : Array Photo
+photoArray =
+    Array.fromList initialModel.photos
+
+
+update : Msg -> Model -> Model
 update msg model =
     if msg.operation == "SELECT_PHOTO" then
         { model | selectedUrl = msg.data }
+    else if msg.operation == "SURPRISE_ME" then
+        { model | selectedUrl = "2.jgp" }
     else
         model
 
