@@ -18,10 +18,18 @@ type ThumbnailSize
     | Large
 
 
-type alias Msg =
-    { operation : String
-    , data : String
-    }
+type Msg
+    = SelectByUrl String
+    | SurpriseMe
+    | SetSize ThumbnailSize
+
+
+
+-- type alias Msg =
+--     { operation : String
+--     , data : String
+--     , sizeData : ThumbnailSize
+--     }
 
 
 type alias Photo =
@@ -41,7 +49,7 @@ view model =
     div [ class "content" ]
         [ h1 [] [ text "Photo Groove" ]
         , button
-            [ onClick { operation = "SURPRISE_ME", data = "" } ]
+            [ onClick SurpriseMe ]
             [ text "Surprise me!" ]
         , h3 [] [ text "Thumbnail Size: " ]
         , div [ id "choose-size" ]
@@ -61,7 +69,7 @@ viewThumbnail selectedUrl thumbnail =
     img
         [ src (urlPrefix ++ thumbnail.url)
         , classList [ ( "selected", selectedUrl == thumbnail.url ) ]
-        , onClick { operation = "SELECT_PHOTO", data = thumbnail.url }
+        , onClick (SelectByUrl thumbnail.url)
         ]
         []
 
@@ -69,7 +77,12 @@ viewThumbnail selectedUrl thumbnail =
 viewSizeChooser : ThumbnailSize -> Html Msg
 viewSizeChooser size =
     label []
-        [ input [ type' "radio", name "size" ] []
+        [ input
+            [ type' "radio"
+            , name "size"
+            , onClick (SetSize size)
+            ]
+            []
         , text (sizeToString size)
         ]
 
@@ -105,17 +118,27 @@ photoArray =
     Array.fromList initialModel.photos
 
 
+getPhotoUrl : Int -> String
+getPhotoUrl index =
+    case Array.get index photoArray of
+        Just photo ->
+            photo.url
+
+        Nothing ->
+            ""
+
+
 update : Msg -> Model -> Model
 update msg model =
-    case msg.operation of
-        "SELECT_PHOTO" ->
-            { model | selectedUrl = msg.data }
+    case msg of
+        SelectByUrl url ->
+            { model | selectedUrl = url }
 
-        "SURPRISE_ME" ->
+        SurpriseMe ->
             { model | selectedUrl = "2.jpeg" }
 
-        _ ->
-            model
+        SetSize size ->
+            { model | chosenSize = size }
 
 
 main =
