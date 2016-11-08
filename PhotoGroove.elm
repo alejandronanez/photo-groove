@@ -12,9 +12,27 @@ urlPrefix =
     "http://elm-in-action.com/"
 
 
+type ThumbnailSize
+    = Small
+    | Medium
+    | Large
+
+
 type alias Msg =
     { operation : String
     , data : String
+    }
+
+
+type alias Photo =
+    { url : String
+    }
+
+
+type alias Model =
+    { photos : List Photo
+    , selectedUrl : String
+    , chosenSize : ThumbnailSize
     }
 
 
@@ -25,7 +43,11 @@ view model =
         , button
             [ onClick { operation = "SURPRISE_ME", data = "" } ]
             [ text "Surprise me!" ]
-        , div [ id "thumbnails" ] (List.map (viewThumbnail model.selectedUrl) model.photos)
+        , h3 [] [ text "Thumbnail Size: " ]
+        , div [ id "choose-size" ]
+            (List.map viewSizeChooser [ Small, Medium, Large ])
+          -- [ viewSizeChooser Small, viewSizeChooser Medium, viewSizeChooser Large ]
+        , div [ id "thumbnails", class (sizeToString model.chosenSize) ] (List.map (viewThumbnail model.selectedUrl) model.photos)
         , img
             [ class "large"
             , src (urlPrefix ++ "large/" ++ model.selectedUrl)
@@ -44,15 +66,25 @@ viewThumbnail selectedUrl thumbnail =
         []
 
 
-type alias Photo =
-    { url : String
-    }
+viewSizeChooser : ThumbnailSize -> Html Msg
+viewSizeChooser size =
+    label []
+        [ input [ type' "radio", name "size" ] []
+        , text (sizeToString size)
+        ]
 
 
-type alias Model =
-    { photos : List Photo
-    , selectedUrl : String
-    }
+sizeToString : ThumbnailSize -> String
+sizeToString size =
+    case size of
+        Small ->
+            "small"
+
+        Medium ->
+            "medium"
+
+        Large ->
+            "large"
 
 
 initialModel : Model
@@ -64,7 +96,7 @@ initialModel =
         ]
     , selectedUrl =
         "1.jpeg"
-        -- Select first photo by default
+    , chosenSize = Small
     }
 
 
